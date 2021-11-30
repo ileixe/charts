@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dhcp
+  labels:
+    app: kea-dhcp
+spec:
+  type: LoadBalancer
+  selector:
+    app: kea-dhcp
+  type: ClusterIP
+  ports:
+  - port: 67
+    name: dhcp
+    targetPort: 67
+    protocol: UDP

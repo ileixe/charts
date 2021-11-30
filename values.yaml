@@ -1,0 +1,20 @@
+image:
+  repository: sjmiller609
+  name: kea-dhcp
+  version: latest
+  pullPolicy: IfNotPresent
+pool: "10.0.0.3-10.0.0.254"
+subnet: "10.0.0.0/24"
+logLevel: "DEBUG"
+interface: "enp6s0"
+
+postgresql:
+  postgresqlUsername: postgres
+  postgresqlPassword: defaultpostgrespassword
+  servicePort: 5432
+  service:
+    type: ClusterIP
+  initdbScripts:
+    my_init_script.sql: |
+      CREATE DATABASE kea;
+      GRANT ALL PRIVILEGES ON DATABASE kea TO postgres

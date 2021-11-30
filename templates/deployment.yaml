@@ -1,0 +1,98 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kea-dhcp-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kea-dhcp
+  template:
+    metadata:
+      labels:
+        app: kea-dhcp
+        component: mediaserver
+    spec:
+      # DHCP intended for the host network
+      # needs to work with broadcast messages
+      # on the host's subnet.
+      hostNetwork: true
+      dnsPolicy: ClusterFirstWithHostNet
+      initContainers:
+      - name: db-init
+        image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.version }}
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: password
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: host
+        command:
+          - "/bin/bash"
+        args:
+          - "-c"
+          - |
+            set -e
+            init-config
+            wait-for-db
+            init-db
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        volumeMounts:
+          - name: kea-dhcp4-config
+            mountPath: /kea-kube-configmap.conf
+            subPath: config
+      containers:
+      - name: kea
+        # This allows us to serve on 67
+        securityContext:
+          privileged: true
+        image: {{ .Values.image.repository }}/{{ .Values.image.name }}:{{ .Values.image.version }}
+        env:
+          - name: DB_USER
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: user
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: password
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: dhcp-db-secret
+                key: host
+        command:
+          - "/bin/bash"
+        args:
+          - "-c"
+          - |
+            set -e
+            init-config
+            wait-for-db
+            echo "Starting IPv4 DHCP server"
+            kea-dhcp4 -c /active-config.conf
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - containerPort: 67
+          protocol: UDP
+          name: dhcp
+        volumeMounts:
+          - name: kea-dhcp4-config
+            mountPath: /kea-kube-configmap.conf
+            subPath: config
+      volumes:
+        - name: kea-dhcp4-config
+          configMap:
+            name: kea-dhcp4-config

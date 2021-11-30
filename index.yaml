@@ -1,0 +1,45 @@
+apiVersion: v1
+entries:
+  kea-dhcp:
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2021-11-30T17:25:59.561771324+09:00"
+    dependencies:
+    - name: postgresql
+      repository: '@stable'
+      version: 6.3.12
+    description: A Helm chart for Kubernetes
+    digest: f01cd8e6f5eb22f1c6854176d7c44b9caf332f9805146178c14a82127263cf35
+    name: kea-dhcp
+    type: application
+    urls:
+    - charts/kea-dhcp-0.1.0.tgz
+    version: 0.1.0
+  postgresql:
+  - apiVersion: v1
+    appVersion: 11.5.0
+    created: "2021-11-30T17:25:59.563225776+09:00"
+    description: Chart for PostgreSQL, an object-relational database management system
+      (ORDBMS) with an emphasis on extensibility and on standards-compliance.
+    digest: e3d8f710db745334731a5ed5d0a3b8731bb74109388e4755cc1ef6b9c4b2f288
+    home: https://www.postgresql.org/
+    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+    keywords:
+    - postgresql
+    - postgres
+    - database
+    - sql
+    - replication
+    - cluster
+    maintainers:
+    - email: containers@bitnami.com
+      name: Bitnami
+    - email: cedric@desaintmartin.fr
+      name: desaintmartin
+    name: postgresql
+    sources:
+    - https://github.com/bitnami/bitnami-docker-postgresql
+    urls:
+    - charts/postgresql-6.3.12.tgz
+    version: 6.3.12
+generated: "2021-11-30T17:25:59.559922525+09:00"
