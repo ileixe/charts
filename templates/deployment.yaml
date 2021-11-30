@@ -92,7 +92,14 @@ spec:
           - name: kea-dhcp4-config
             mountPath: /kea-kube-configmap.conf
             subPath: config
+        volumeMounts:
+          - name: kea-active-config
+            mountPath: /active-config.conf
+            subPath: config
       volumes:
         - name: kea-dhcp4-config
           configMap:
             name: kea-dhcp4-config
+        - name: kea-active-config
+          configMap:
+            name: kea-active-config

@@ -32,3 +32,14 @@ data:
             }]
         }
     }
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: kea-active-config
+data:
+  config: |
+    {
+    }
