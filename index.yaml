@@ -3,7 +3,7 @@ entries:
   kea-dhcp:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2023-04-10T21:14:48.943808196+09:00"
+    created: "2023-04-10T21:23:46.379233326+09:00"
     dependencies:
     - name: postgresql
       repository: '@stable'
@@ -18,9 +18,9 @@ entries:
   pypi-server:
   - apiVersion: v2
     appVersion: 1.4.2
-    created: "2023-04-10T21:14:48.944284794+09:00"
+    created: "2023-04-10T21:23:46.379671472+09:00"
     description: A high availablility, persistent, auto-scaling pypi-server application.
-    digest: c428e2673567a01905deb555dbaf7c32eb7b2fe69c122a6cceda8f2e6f30df03
+    digest: f07037f2da75a27878182ec6deb946c9a8a1dace5fc30052df345cd530693174
     home: https://github.com/cgsimmons/charts/tree/master/pypi-server
     icon: https://cgsimmons.github.io/charts/icons/pypi-server.svg
     keywords:
@@ -37,4 +37,4 @@ entries:
     urls:
     - pypi-server-0.2.0.tgz
     version: 0.2.0
-generated: "2023-04-10T21:14:48.940734811+09:00"
+generated: "2023-04-10T21:23:46.375678701+09:00"
