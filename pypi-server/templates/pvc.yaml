@@ -2,7 +2,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "pypiServer.fullname" . }}
+  name: {{ include "pypiServer.name" . }}
   labels:
     {{- include "pypiServer.labels" . | nindent 4 }}
 spec:

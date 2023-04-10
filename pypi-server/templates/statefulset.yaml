@@ -1,14 +1,14 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "pypiServer.fullname" . }}
+  name: {{ include "pypiServer.name" . }}
   labels:
     {{- include "pypiServer.labels" . | nindent 4 }}
 spec:
 {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.pod.replicas }}
 {{- end }}
-  serviceName: {{ include "pypiServer.fullname" . }}
+  serviceName: {{ include "pypiServer.name" . }}
   selector:
     matchLabels:
       {{- include "pypiServer.selectorLabels" . | nindent 6 }}
@@ -82,11 +82,11 @@ spec:
             items:
             - key: {{ .Values.auth.secretKey }}
               path: passwords
-            secretName: {{ .Values.auth.secretName | default (include "pypiServer.fullname" .) }}
+            secretName: {{ .Values.auth.secretName | default (include "pypiServer.name" .) }}
         {{- end }}
         - name: packages
           persistentVolumeClaim:
-            claimName: {{ .Values.persistence.existingClaim | default (include "pypiServer.fullname" .) }}
+            claimName: {{ .Values.persistence.existingClaim | default (include "pypiServer.name" .) }}
       nodeSelector:
         {{- toYaml .Values.pod.nodeSelector | nindent 8 }}
       {{- with .Values.pod.affinity }}
