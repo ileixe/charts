@@ -1,0 +1,21 @@
+{{- if not .Values.persistence.existingClaim -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "pypiServer.fullname" . }}
+  labels:
+    {{- include "pypiServer.labels" . | nindent 4 }}
+spec:
+  accessModes:
+    - "ReadWriteMany"
+  resources:
+    requests:
+      storage: {{ .Values.persistence.size | quote }}
+{{- if .Values.persistence.storageClassName }}
+{{- if (eq "-" .Values.persistence.storageClassName) }}
+  storageClassName: ""
+{{- else }}
+  storageClassName: "{{ .Values.persistence.storageClassName }}"
+{{- end }}
+{{- end }}
+{{- end -}}

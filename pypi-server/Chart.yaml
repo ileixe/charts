@@ -1,0 +1,17 @@
+apiVersion: v2
+name: pypi-server
+version: 0.2.0
+description: A high availablility, persistent, auto-scaling pypi-server application.
+icon: https://cgsimmons.github.io/charts/icons/pypi-server.svg
+type: application
+keywords:
+  - pypi
+  - python
+home: https://github.com/cgsimmons/charts/tree/master/pypi-server
+sources:
+  - https://github.com/cgsimmons/charts/tree/master/pypi-server
+  - https://github.com/pypiserver/pypiserver
+maintainers:
+  - name: Youseok Yang
+    email: ileixe@gmail.com
+appVersion: 1.4.2

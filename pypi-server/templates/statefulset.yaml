@@ -1,0 +1,108 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ include "pypiServer.fullname" . }}
+  labels:
+    {{- include "pypiServer.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.pod.replicas }}
+{{- end }}
+  serviceName: {{ include "pypiServer.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "pypiServer.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- toYaml .Values.pod.annotations | nindent 8 }}
+      labels:
+        {{- include "pypiServer.selectorLabels" . | nindent 8 }}
+        {{- if .Values.podLabels }}
+        {{- toYaml .Values.podLabels | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- with .Values.image.pullSecrets }}
+      imagePullSecrets:
+      {{- range . }}
+        - name: {{ . }}
+      {{- end }}
+      {{- end }}
+      serviceAccountName: {{ include "pypiServer.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.pod.securityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.container.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default (printf "v%s" .Chart.AppVersion) }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["pypi-server"]
+          args:
+            - --passwords={{if eq .Values.auth.actions "." }}.{{ else }}/config/passwords{{ end }}
+            - --authenticate={{ .Values.auth.actions }}
+            - --port=8080
+            {{- range .Values.server.extraArgs }}
+            - {{ . }}
+            {{- end }}
+            - /data/packages
+          volumeMounts:
+            - mountPath: /data/packages
+              name: packages
+            {{- if ne .Values.auth.actions "." }}
+            - mountPath: /config
+              name: secrets
+              readOnly: true
+            {{- end }}
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 30
+            timeoutSeconds: 5
+            failureThreshold: 6
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 5
+            timeoutSeconds: 3
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.container.resources | nindent 12 }}
+      volumes:
+        {{- if ne .Values.auth.actions "." }}
+        - name: secrets
+          secret:
+            defaultMode: 420
+            items:
+            - key: {{ .Values.auth.secretKey }}
+              path: passwords
+            secretName: {{ .Values.auth.secretName | default (include "pypiServer.fullname" .) }}
+        {{- end }}
+        - name: packages
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.existingClaim | default (include "pypiServer.fullname" .) }}
+      nodeSelector:
+        {{- toYaml .Values.pod.nodeSelector | nindent 8 }}
+      {{- with .Values.pod.affinity }}
+      affinity:
+        {{- if . }}
+          {{- toYaml . | nindent 8 }}
+        {{ else }}
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  {{- include "pypiServer.selectorLabels" . | nindent 18 }}
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+        {{ end }}
+      {{- end }}
+      tolerations:
+        {{- toYaml .Values.pod.tolerations | nindent 8 }}

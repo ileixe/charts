@@ -1,45 +1,40 @@
 apiVersion: v1
 entries:
-  charts:
+  kea-dhcp:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2021-11-30T18:28:56.839352159+09:00"
+    created: "2023-04-10T20:07:22.272774221+09:00"
     dependencies:
     - name: postgresql
       repository: '@stable'
       version: 6.3.12
-    description: A Helm chart for Kubernetes
-    digest: 578909edafe28926c9ec10754654fbf24f228611596689fb45b2dd648ffb7d8f
-    name: charts
+    description: A Helm chart for Kea DHCP
+    digest: 82be0dd32e5583e311a26e3920fe06328afd36f78faf0b637c790bca0560e9ad
+    name: kea-dhcp
     type: application
     urls:
-    - charts/charts-0.1.0.tgz
+    - kea-dhcp-0.1.0.tgz
     version: 0.1.0
-  postgresql:
-  - apiVersion: v1
-    appVersion: 11.5.0
-    created: "2021-11-30T18:28:56.840781549+09:00"
-    description: Chart for PostgreSQL, an object-relational database management system
-      (ORDBMS) with an emphasis on extensibility and on standards-compliance.
-    digest: e3d8f710db745334731a5ed5d0a3b8731bb74109388e4755cc1ef6b9c4b2f288
-    home: https://www.postgresql.org/
-    icon: https://bitnami.com/assets/stacks/postgresql/img/postgresql-stack-110x117.png
+  pypi-server:
+  - apiVersion: v2
+    appVersion: 1.4.2
+    created: "2023-04-10T20:07:22.273213198+09:00"
+    description: A high availablility, persistent, auto-scaling pypi-server application.
+    digest: ae411f2af2053c29e280b555220be65e7af445232683976ea000c6c61db79044
+    home: https://github.com/cgsimmons/charts/tree/master/pypi-server
+    icon: https://cgsimmons.github.io/charts/icons/pypi-server.svg
     keywords:
-    - postgresql
-    - postgres
-    - database
-    - sql
-    - replication
-    - cluster
+    - pypi
+    - python
     maintainers:
-    - email: containers@bitnami.com
-      name: Bitnami
-    - email: cedric@desaintmartin.fr
-      name: desaintmartin
-    name: postgresql
+    - email: ileixe@gmail.com
+      name: Youseok Yang
+    name: pypi-server
     sources:
-    - https://github.com/bitnami/bitnami-docker-postgresql
+    - https://github.com/cgsimmons/charts/tree/master/pypi-server
+    - https://github.com/pypiserver/pypiserver
+    type: application
     urls:
-    - charts/postgresql-6.3.12.tgz
-    version: 6.3.12
-generated: "2021-11-30T18:28:56.837517065+09:00"
+    - pypi-server-0.2.0.tgz
+    version: 0.2.0
+generated: "2023-04-10T20:07:22.269341764+09:00"

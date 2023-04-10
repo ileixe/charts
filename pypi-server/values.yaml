@@ -1,0 +1,91 @@
+# Default values for pypiServer.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+container:
+  securityContext: {}
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+image:
+  repository: pypiserver/pypiserver
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+  pullSecrets: []
+
+pod:
+  replicas: 2
+  annotations: {}
+  labels: {}
+  securityContext: {}
+  nodeSelector: {}
+  tolerations: []
+
+service:
+  port: 80
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts: []
+    # - host: pypi-server.com
+    #   paths: 
+    #   - "/"
+  tls: []
+    #  - secretName: chart-example-tls
+    #    hosts:
+    #      - chart-example.local
+
+persistence:
+  ## Replicas will share the same PersistentVolumeClaim, with ReadWriteMany access mode
+  ## You may substitute your own persistent volume claim by using `existingClaim`
+  size: 5Gi
+
+auth:
+  ## comma-separated list of (case-insensitive) actions to authenticate
+  ## Use '.' to disable all authentication and credentials
+  ## Requires auth.credentials or auth.secretName when set (options below) 
+  ## Available actions are update, download and list
+  actions: list,download,update
+  ## Map of username / encoded passwords that will be put to the htpasswd file
+  ## use `htpasswd -n -b username password` to generate them
+  credentials: {
+    admin: admin
+  }
+  ## A secret with htpasswd data my be provided instead of credentials by passing
+  ## the name here as `secretName` and corresponding data key as secretKey
+  # secretName: yourSecret
+  secretKey: auth
+
+server:
+  # for a list of options see: https://github.com/pypiserver/pypiserver
+  extraArgs: []
+    # - --disable-fallback
+    # - --log-conf=/path/to/file
+
+autoscaling:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
