@@ -41,7 +41,7 @@ spec:
           args:
             - --passwords={{if eq .Values.auth.actions "." }}.{{ else }}/config/passwords{{ end }}
             - --authenticate={{ .Values.auth.actions }}
-            - --port=8080
+            - --port=80
             {{- range .Values.server.extraArgs }}
             - {{ . }}
             {{- end }}
