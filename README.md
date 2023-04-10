@@ -1,11 +1,11 @@
 Private helm chart
 ==================
 
-# Available charts
+### Available charts
 - kea-dhcp
 - pypi-server 
 
-# Getting started
+### Getting started
 
 ```bash
 helm repo add ileixe https://ileixe.github.io/charts/

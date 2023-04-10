@@ -9,7 +9,7 @@ spec:
   clusterIP: None
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      targetPort: 8080
       protocol: TCP
       name: http
   selector: {{- include "pypiServer.selectorLabels" . | nindent 4 }}
